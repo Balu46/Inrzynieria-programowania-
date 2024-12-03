@@ -270,11 +270,7 @@ int main()
 	p.set_age(16);
 	p.set_age(17);
 	p.set_age(21);
-	if (true)
-	{
-
-	}
-
+	
 	getchar();
 	return 0;
 }
