@@ -88,7 +88,7 @@ public:
 	virtual void field_changed(T& source, const string& field_name) = 0;
 };
 
-class data_pool : Observable<data_pool>
+class data_pool : public Observable<data_pool>
 {
 public:
 
@@ -186,44 +186,41 @@ private:
 	int age;
 };
 
-struct Creature
-{
-	
-};
 
-class ConsolePersonObserver : public Observer<Person>
-{
-public:
-	void field_changed(Person& source, const string& field_name) override
-	{
-		cout << "Person's " << field_name << " has changed to "
-			<< source.get_age() << ".\n";
-	}
-};
 
-class TrafficAdministration : public Observer<Person>
-{
-public:
-	void field_changed(	Person& source, const string& field_name) override
-	{
-		if (field_name == "age")
-		{
-			if (source.get_age() < 17)
-				cout << "Whoa there, you are not old enough to drive!\n";
-			else
-			{
-				// oh, ok, they are old enough, let's not monitor them anymore
-				cout << "We no longer care!\n";
-				source.unsubscribe(this);
-			}
-		}
-	}
-};
+//class ConsolePersonObserver : public Observer<Person>
+//{
+//public:
+//	void field_changed(Person& source, const string& field_name) override
+//	{
+//		cout << "Person's " << field_name << " has changed to "
+//			<< source.get_age() << ".\n";
+//	}
+//};
+//
+//class TrafficAdministration : public Observer<Person>
+//{
+//public:
+//	void field_changed(	Person& source, const string& field_name) override
+//	{
+//		if (field_name == "age")
+//		{
+//			if (source.get_age() < 17)
+//				cout << "Whoa there, you are not old enough to drive!\n";
+//			else
+//			{
+//				// oh, ok, they are old enough, let's not monitor them anymore
+//				cout << "We no longer care!\n";
+//				source.unsubscribe(this);
+//			}
+//		}
+//	}
+//};
 
 class Observing_in_100ms_intervals : public Observer<data_pool>
 {
 public:
-	void field_changed(	Person& source, const string& field_name) override
+	void field_changed(	data_pool& source, const string& field_name) override
 	{
 		if (field_name == "age")
 		{
