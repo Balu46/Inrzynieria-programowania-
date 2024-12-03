@@ -165,7 +165,7 @@ public:
 	}
 	  
 	void set_age(const int age)
-	{
+	{ 
 		if (this->age == age) return;
 
 		auto old_can_vote = can_vote();
@@ -181,14 +181,14 @@ public:
 	{
 		return age >= 16;
 	}
-
+	
 private:
 	int age;
 };
 
 struct Creature
 {
-
+	
 };
 
 class ConsolePersonObserver : public Observer<Person>
@@ -270,7 +270,10 @@ int main()
 	p.set_age(16);
 	p.set_age(17);
 	p.set_age(21);
+	if (true)
+	{
 
+	}
 	getchar();
 	return 0;
 }
