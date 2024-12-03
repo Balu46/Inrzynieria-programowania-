@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 #include <random>
+#include <ctime>
+#include <iomanip>
 using namespace std;
 
 #include <concurrent_vector.h>
@@ -100,6 +102,7 @@ public:
 
 		age = age_to_change;
 	}
+	int get_age() { return age; }
 
 	data_pool() : age(0) {}
 	~data_pool() {}
@@ -220,19 +223,29 @@ private:
 class Observing_in_100ms_intervals : public Observer<data_pool>
 {
 public:
-	void field_changed(	data_pool& source, const string& field_name) override
+	int last_age;
+	int number_of_obserwer;
+
+	void chect_for_changes(	data_pool& source) 
 	{
-		if (field_name == "age")
+		while (true)
 		{
-			if (source.get_age() < 17)
-				cout << "Whoa there, you are not old enough to drive!\n";
-			else
+			this_thread::sleep_for(chrono::milliseconds(100));
+
+			if (last_age != source.get_age())
 			{
-				// oh, ok, they are old enough, let's not monitor them anymore
-				cout << "We no longer care!\n";
-				source.unsubscribe(this);
+
+				auto now = std::chrono::system_clock::now();
+
+				// Convert to time_t for human-readable format
+				std::time_t current_time = std::chrono::system_clock::to_time_t(now);
+
+
+
+				cout << number_of_obserwer << " change observed at : " << put_time(localtime(&current_time), "%Y-%m-%d %H:%M:%S") <<endl;
 			}
 		}
+		
 	}
 };
 
