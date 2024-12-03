@@ -232,6 +232,7 @@ public:
 
 	void field_changed(data_pool* source, const string& field_name) override
 	{
+		
 		if (last_age != source->get_age())
 		{
 			last_age = source->get_age();
