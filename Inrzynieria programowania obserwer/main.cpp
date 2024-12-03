@@ -41,7 +41,7 @@ class Observable
 public:
 	typedef mutex mutex_t;
 
-	void notify(T& source, const string& name)
+	void notify(T* source, const string& name)
 	{
 		vector<Observer<T>*> observers_copy;
 		{
@@ -84,10 +84,14 @@ private:
 	mutex_t mtx;
 };
 
+
+
+
 template<typename T> class Observer
 {
 public:
-	virtual void field_changed(T& source, const string& field_name) = 0;
+	virtual void field_changed(T* source, const string& field_name) = 0;
+	virtual void chect_for_changes(T* source){}
 };
 
 class data_pool : public Observable<data_pool>
@@ -226,27 +230,63 @@ public:
 	int last_age;
 	int number_of_obserwer;
 
-	void chect_for_changes(	data_pool& source) 
+	void field_changed(data_pool* source, const string& field_name) override
+	{
+		if (last_age != source->get_age())
+		{
+			last_age = source->get_age();
+
+			// Pobierz aktualny czas
+			time_t now = std::time(nullptr);
+
+			// Struktura do przechowywania zlokalizowanego czasu
+			tm local_time;
+
+			// U¿yj localtime_s, aby przekonwertowaæ czas na lokalny
+			if (localtime_s(&local_time, &now) == 0) { // SprawdŸ, czy funkcja siê powiod³a
+				// Wyœwietl sformatowan¹ datê i czas
+				cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << endl;
+			}
+			else {
+				std::cerr << "B³¹d podczas pobierania lokalnego czasu!" << std::endl;
+			}
+		}
+	}
+	void chect_for_changes(	data_pool* source )
 	{
 		while (true)
 		{
 			this_thread::sleep_for(chrono::milliseconds(100));
 
-			if (last_age != source.get_age())
+			if (last_age != source->get_age())
 			{
+				last_age = source->get_age();
 
-				auto now = std::chrono::system_clock::now();
+				// Pobierz aktualny czas
+				time_t now = std::time(nullptr);
 
-				// Convert to time_t for human-readable format
-				std::time_t current_time = std::chrono::system_clock::to_time_t(now);
+				// Struktura do przechowywania zlokalizowanego czasu
+				tm local_time;
+
+				// U¿yj localtime_s, aby przekonwertowaæ czas na lokalny
+				if (localtime_s(&local_time, &now) == 0) { // SprawdŸ, czy funkcja siê powiod³a
+					// Wyœwietl sformatowan¹ datê i czas
+					cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << endl;	
+				}
+				else {
+					std::cerr << "B³¹d podczas pobierania lokalnego czasu!" << std::endl;
+				}
 
 
 
-				cout << number_of_obserwer << " change observed at : " << put_time(localtime(&current_time), "%Y-%m-%d %H:%M:%S") <<endl;
+				
 			}
 		}
 		
 	}
+
+
+	Observing_in_100ms_intervals(int age, int obserwer) : last_age(age), number_of_obserwer(obserwer) {}
 };
 
 
@@ -273,10 +313,20 @@ int main()
 	p.subscribe(&cpo);
 	p.set_age(21);
 	p.set_age(22);*/
+	Observing_in_100ms_intervals o(10, 0);
 
 	Person p{ 10 };
-	TrafficAdministration o;
-	p.subscribe(&o);
+	
+	data_pool* data = data_pool::GetInstance();
+
+	
+	data->subscribe(&o);
+
+	data->change_age(11);
+
+	o.chect_for_changes(data);
+
+
 	p.set_age(16);
 	p.set_age(17);
 	p.set_age(21);
