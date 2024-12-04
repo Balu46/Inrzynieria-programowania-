@@ -41,7 +41,7 @@ class Observable
 public:
 	typedef mutex mutex_t;
 
-	void notify(T* source, const string& name)
+	void notify(T& source, const string& name)
 	{
 		vector<Observer<T>*> observers_copy;
 		{
@@ -90,8 +90,8 @@ private:
 template<typename T> class Observer
 {
 public:
-	virtual void field_changed(T* source, const string& field_name) = 0;
-	virtual void chect_for_changes(T* source){}
+	virtual void field_changed(T& source, const string& field_name) = 0;
+	virtual void check_for_changes(T* source){}
 };
 
 class data_pool : public Observable<data_pool>
@@ -230,30 +230,30 @@ public:
 	int last_age;
 	int number_of_obserwer;
 
-	void field_changed(data_pool* source, const string& field_name) override
+	void field_changed(data_pool& source, const string& field_name) 
 	{
 		
-		if (last_age != source->get_age())
-		{
-			last_age = source->get_age();
+		//if (last_age != source->get_age())
+		//{
+		//	last_age = source->get_age();
 
-			// Pobierz aktualny czas
-			time_t now = std::time(nullptr);
+		//	// Pobierz aktualny czas
+		//	time_t now = std::time(nullptr);
 
-			// Struktura do przechowywania zlokalizowanego czasu
-			tm local_time;
+		//	// Struktura do przechowywania zlokalizowanego czasu
+		//	tm local_time;
 
-			// U¿yj localtime_s, aby przekonwertowaæ czas na lokalny
-			if (localtime_s(&local_time, &now) == 0) { // SprawdŸ, czy funkcja siê powiod³a
-				// Wyœwietl sformatowan¹ datê i czas
-				cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << endl;
-			}
-			else {
-				std::cerr << "B³¹d podczas pobierania lokalnego czasu!" << std::endl;
-			}
-		}
+		//	// U¿yj localtime_s, aby przekonwertowaæ czas na lokalny
+		//	if (localtime_s(&local_time, &now) == 0) { // SprawdŸ, czy funkcja siê powiod³a
+		//		// Wyœwietl sformatowan¹ datê i czas
+		//		cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << endl;
+		//	}
+		//	else {
+		//		std::cerr << "B³¹d podczas pobierania lokalnego czasu!" << std::endl;
+		//	}
+		//}
 	}
-	void chect_for_changes(	data_pool* source )
+	void check_for_changes(	data_pool* source )
 	{
 		while (true)
 		{
@@ -272,7 +272,7 @@ public:
 				// U¿yj localtime_s, aby przekonwertowaæ czas na lokalny
 				if (localtime_s(&local_time, &now) == 0) { // SprawdŸ, czy funkcja siê powiod³a
 					// Wyœwietl sformatowan¹ datê i czas
-					cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << endl;	
+					cout << number_of_obserwer << " change observed at : " << put_time(&local_time, "%Y-%m-%d %H:%M:%S") << " : " << last_age << endl;
 				}
 				else {
 					std::cerr << "B³¹d podczas pobierania lokalnego czasu!" << std::endl;
@@ -297,40 +297,49 @@ public:
 
 int main()
 {
-	vector<thread> list_of_my_threads;
-
-	//int n = 5;// emount of my threads;
-	//for (int i = 0; i < n; i++)
-	//{
-	//	thread th;
-
-	//	list_of_my_threads.push_back(th);
-	//}
+	
 
 	cout << "observer book" << endl;
 
-	/*Person p{ 20 };
-	ConsolePersonObserver cpo;
-	p.subscribe(&cpo);
-	p.set_age(21);
-	p.set_age(22);*/
-	Observing_in_100ms_intervals o(10, 0);
+	
 
 	Person p{ 10 };
+
+	//Observing_in_100ms_intervals o(p.get_age(), 0);
 	
 	data_pool* data = data_pool::GetInstance();
 
-	
-	data->subscribe(&o);
-
-	data->change_age(11);
-
-	o.chect_for_changes(data);
 
 
-	p.set_age(16);
-	p.set_age(17);
-	p.set_age(21);
+
+	thread person_thread(&Person::changing_age, &p);
+	vector<thread*> list_of_my_threads;
+
+	//Observing_in_100ms_intervals o(p.get_age(), 0);
+	//data->subscribe(&o);
+	//thread th(&Observing_in_100ms_intervals::check_for_changes, &o, data);
+
+
+	int n = 5;// emount of my threads;
+	for (int i = 0; i < n; i++)
+	{
+		Observing_in_100ms_intervals o(p.get_age(), i);
+		data->subscribe(&o);
+		thread* th = new thread(&Observing_in_100ms_intervals::check_for_changes, &o, data);
+
+		list_of_my_threads.push_back(th);
+	}
+
+
+	for (int i = 0; i < n; i++)
+	{
+		list_of_my_threads[i]->join();
+	}
+
+
+
+
+
 	
 	getchar();
 	return 0;
