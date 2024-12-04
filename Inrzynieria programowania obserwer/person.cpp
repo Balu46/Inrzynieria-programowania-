@@ -3,7 +3,7 @@
 
 void Person::changing_age() {
 
-	lock_guard<mutex> lock(sMutex);
+	
 
 	srand(time(NULL));
 	int number_of_random_changes = rand() % 50 + 10;

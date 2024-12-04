@@ -36,6 +36,7 @@ int client() {
 	th2.join();
 	th3.join();
 
+	person_thread.join();
 
 
 

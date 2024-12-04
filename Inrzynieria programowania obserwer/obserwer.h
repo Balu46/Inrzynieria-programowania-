@@ -27,7 +27,7 @@ public:
 	Observer(Person& person_to_observe, int number);
 
 private:
-	mutex sMutex;
+	
 
-	void check_for_changes(data_pool* source);
+	void check_for_changes();
 };

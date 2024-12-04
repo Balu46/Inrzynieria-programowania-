@@ -41,7 +41,7 @@ protected:
 
 private:
 	data_pool* my_data; // link to my data_pool that is global singleton
-	mutex sMutex;
+	
 	int age;
 };
 
