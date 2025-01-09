@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\string_view(12): warning STL4038: The contents of <string_view> are available only with C++17 or later.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\syncstream(11): warning STL4038: The contents of <syncstream> are available only with C++20 or later.
+  Builder_threads.vcxproj -> C:\Users\janza\source\repos\Builder_threads\x64\Debug\Builder_threads.exe
