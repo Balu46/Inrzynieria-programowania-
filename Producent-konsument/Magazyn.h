@@ -10,7 +10,7 @@ struct MyStruct
     int int2;
 };
 /**
- * The Magazyn class defines the `GetInstance` method that serves as an
+ * The Singleton class defines the `GetInstance` method that serves as an
  * alternative to constructor and lets clients access the same instance of this
  * class over and over.
  */
@@ -35,11 +35,11 @@ protected:
         does_conteiner_have_data = false;
     }
     ~Magazyn() {}
-    std::queue<MyStruct> content_of_container;
+    std::queue<MyStruct> content_of_container; // conteiner that contains data in a form of queue
     int max_size;
-    std::condition_variable cv;
-    bool space_to_add_data;
-    bool does_conteiner_have_data;
+    std::condition_variable cv; // condition variable for waiting to add something if container is full
+    bool space_to_add_data; // boolian variable that stores if we can add data to singleton, true if you can add data false if container is full
+    bool does_conteiner_have_data; // boolian variable that stores if container conains any data if yes it has true, if not  false 
 
 
 public:
@@ -64,9 +64,9 @@ public:
      * executed on its instance.
      */
 
-    int adding_data( int first_int ,int second_int);
+    int adding_data( int first_int ,int second_int); // function that add specific data to last position in queue
 
-    MyStruct removing_data();
+    MyStruct removing_data();// funtion that removes last date in queue
 
     
 };

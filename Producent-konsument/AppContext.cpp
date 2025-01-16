@@ -26,8 +26,8 @@ AppContext::~AppContext()
 int AppContext::app_functior()
 {
 
-    std::vector<std::thread*> list_of_consumer;
-    std::vector<std::thread*> list_of_producers;
+    std::vector<std::thread*> list_of_consumer; // list containing pointers to consumer threads
+    std::vector<std::thread*> list_of_producers; // list containing pointers to producer threads
 
     int amout_of_consumers = 0;
     int amout_of_producers = 0;
