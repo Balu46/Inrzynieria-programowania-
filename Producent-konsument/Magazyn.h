@@ -31,10 +31,16 @@ private:
 protected:
     Magazyn(int max_size_of_conteir) : max_size(max_size_of_conteir)
     {
+        space_to_add_data = true;
+        does_conteiner_have_data = false;
     }
     ~Magazyn() {}
     std::queue<MyStruct> content_of_container;
     int max_size;
+    std::condition_variable cv;
+    bool space_to_add_data;
+    bool does_conteiner_have_data;
+
 
 public:
     /**

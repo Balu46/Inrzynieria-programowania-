@@ -8,7 +8,7 @@ Consumer::~Consumer()
 {
 }
 
-void Consumer::consumer_theread()
+void Consumer::consume_data()
 {
     while (true) {
 

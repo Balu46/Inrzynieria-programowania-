@@ -3,7 +3,7 @@
 void consumerThread()
 {
     Consumer co;
-    co.consumer_theread();
+    co.consume_data();
 }
 
 void producerThread()
@@ -26,32 +26,46 @@ AppContext::~AppContext()
 int AppContext::app_functior()
 {
 
-    std::vector< std::thread> list_of_consumer;
-    std::vector< std::thread> list_of_producers;
+    std::vector<std::thread*> list_of_consumer;
+    std::vector<std::thread*> list_of_producers;
 
-    std::thread t1(consumerThread);
-    std::thread t2(producerThread);
-
-
-    t1.join();
-    t2.join();
-
-    //for (int i = 0; i < 3; i++)
-    //{
-    //    std::thread t1(consumerThread);
-    //    list_of_consumer.push_back(new );
-    //}
-    //for (int i = 0; i < 3; i++)
-    //{
-    //    std::thread t2(producerThread);
-    //    list_of_producers.push_back(t2);
-    //}
+    int amout_of_consumers = 0;
+    int amout_of_producers = 0;
 
 
-    //for (auto i : list_of_consumer )
-    //{
-    //    i.join();
-    //}
+    std::cout << "How many comsumers you want : ";
+    std::cin >> amout_of_consumers;
+    std::cout << "\n";
+
+    std::cout << "How many producers you want : ";
+    std::cin >> amout_of_producers;
+    std::cout << "\n";
+    
+    for (int i = 0; i < amout_of_producers; i++)
+    {
+   
+        list_of_producers.push_back(new std::thread(producerThread));
+
+    }
+    for (int i = 0; i < amout_of_consumers; i++)
+    {
+        list_of_consumer.push_back(new std::thread(consumerThread));
+
+    }
+        
+    for (auto *i : list_of_consumer)
+    {
+        i->join();
+    }
+
+
+    for (auto *i : list_of_producers)
+    {
+        i->join();
+    }
+
+
+
 
     return 0;
 }

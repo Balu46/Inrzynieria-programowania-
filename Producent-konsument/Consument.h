@@ -11,7 +11,7 @@ public:
 
 
 
-    void consumer_theread();
+    void consume_data();
 private:
 
  

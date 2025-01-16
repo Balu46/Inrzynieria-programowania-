@@ -8,18 +8,8 @@ Producent::~Producent()
 }
 int Producent::produceData()
 {
-    int randomNumber1 = rand() % 1000;
-    int randomNumber2 = rand() % 1000;
-
-
-    
-    return 0;
-}
-
-void Producent::producer_thread()
-{
     while (true) {
-        
+
 
         Magazyn* magazyn = Magazyn::GetInstance(10);
 
@@ -31,6 +21,8 @@ void Producent::producer_thread()
 
     }
     
+    return 0;
 }
+
 
 
