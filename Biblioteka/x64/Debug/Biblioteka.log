@@ -1,0 +1,6 @@
+﻿  Reader.cpp
+C:\Users\janza\source\repos\Inrzyniera oprogramowania observer\Biblioteka\Reader.cpp(34,27): warning C4101: "e": lokalna zmienna, do której nie istnieje odwołanie
+  main.cpp
+C:\Users\janza\source\repos\Inrzyniera oprogramowania observer\Biblioteka\main.cpp(14,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+  Generowanie kodu...
+  Biblioteka.vcxproj -> C:\Users\janza\source\repos\Inrzyniera oprogramowania observer\x64\Debug\Biblioteka.exe
